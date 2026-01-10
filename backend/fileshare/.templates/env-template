@@ -1,0 +1,37 @@
+STAGE=DEV
+
+#SESSION_IDLE_TIMEOUT.MINUTES=1
+#SESSION_LIFETIME_SECONDS=90
+
+TARGET_ORIGIN=localhost:4200,localhost:9850
+QUARKUS_HTTP_CORS_ORIGINS=http://localhost:9850,http://localhost:4200
+
+SESSION_COOKIE_PATH=/
+CSRF_COOKIE_PATH=/
+SESSION_COOKIE_SECURE=false
+CSRF_COOKIE_SECURE=false
+
+# Generierung signature-key: (base64 encoded)
+## openssl rand -base64 64 | tr -d '\n'
+CSRF_COOKIE_SIGNATURE_KEY=generieren-und-eintragen
+
+#=================================================================#
+#    authprovider, Redirect URLs, REST-Client, CORS               #
+#                                                                 #
+# PUBLIC_REDIRECT_URL muss ohne http:// und endenden / in         #
+# CLIENTS.REDIRECT_URLS vorkommen!! Für das korrekte redirect     #
+# sollten sie aber u.U. vorhanden sein.                           #
+#                                                                 #
+#=================================================================#
+PUBLIC-CLIENT-ID=steht-in-der-datenbank
+PUBLIC-CLIENT-SECRET=standardpasswort
+
+AUTH_APP_URL=http://localhost:9000/authprovider/
+QUARKUS_REST_CLIENT_AUTHPROVIDER_URL=http://localhost:9000
+AUTHPROVIDER_URL=http://localhost:9000/authprovider
+
+# ---- lokale Entwicklung (authprovider in docker, fileshare mit npm gestartet) ----
+PUBLIC_REDIRECT_URL=http://localhost:4200
+
+# ---- lokale Entwicklung (authprovider in docker, fileshare von quarkus geserved) ----
+#PUBLIC_REDIRECT_URL=http://localhost:9850/fileshare/

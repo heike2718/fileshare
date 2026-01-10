@@ -1,0 +1,89 @@
+{
+    "name": "fileshare",
+    "$schema": "node_modules/nx/schemas/project-schema.json",
+    "includedScripts": [],
+    "projectType": "application",
+    "prefix": "app",
+    "sourceRoot": "./src",
+    "tags": [],
+    "targets": {
+        "build": {
+            "executor": "@angular/build:application",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/fileshare",
+                "browser": "./src/main.ts",
+                "tsConfig": "tsconfig.app.json",
+                "inlineStyleLanguage": "scss",
+                "assets": [
+                    {
+                        "glob": "**/*",
+                        "input": "public"
+                    },
+                    "./src/assets"
+                ],
+                "styles": [
+                    "src/app/layout/theme.scss",
+                    "src/styles.scss",
+                    "node_modules/material-icons/iconfont/material-icons.css"
+                ]
+            },
+            "configurations": {
+                "production": {
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "500kb",
+                            "maximumError": "1mb"
+                        },
+                        {
+                            "type": "anyComponentStyle",
+                            "maximumWarning": "4kb",
+                            "maximumError": "8kb"
+                        }
+                    ],
+                    "outputHashing": "all"
+                },
+                "development": {
+                    "optimization": false,
+                    "extractLicenses": false,
+                    "sourceMap": true
+                }
+            },
+            "defaultConfiguration": "production"
+        },
+        "serve": {
+            "continuous": true,
+            "executor": "@angular/build:dev-server",
+            "configurations": {
+                "production": {
+                    "buildTarget": "fileshare:build:production"
+                },
+                "development": {
+                    "buildTarget": "fileshare:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "lint": {
+            "executor": "@nx/eslint:lint",
+            "options": {
+                "lintFilePatterns": ["./src"]
+            }
+        },
+        "test": {
+            "executor": "@angular/build:unit-test",
+            "options": {}
+        },
+        "serve-static": {
+            "continuous": true,
+            "executor": "@nx/web:file-server",
+            "options": {
+                "buildTarget": "fileshare:build",
+                "port": 4200,
+                "staticFilePath": "dist/fileshare/browser",
+                "spa": true
+            }
+        }
+    }
+}

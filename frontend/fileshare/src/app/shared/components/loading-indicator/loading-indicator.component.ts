@@ -1,0 +1,10 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+@Component({
+    selector: 'fs-loading-indicator',
+    imports: [],
+    templateUrl: './loading-indicator.component.html',
+    styleUrl: './loading-indicator.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class LoadingIndicatorComponent {}

@@ -1,0 +1,30 @@
+<mat-nav-list class="sidenav" (click)="onSidenavClose()">
+    <!-- menü-->
+    <a mat-list-item class="sidenav__link" routerLink="/home">
+        <mat-icon class="sidenav__icon">home</mat-icon>
+        <span class="sidenav__caption">Startseite</span>
+    </a>
+
+    @if (authFacade.isAuthorized$ | async) {
+        <a mat-list-item class="sidenav__link" routerLink="/files">
+            <mat-icon class="sidenav__icon">inventory_2</mat-icon>
+            <span class="sidenav__caption">Files</span>
+        </a>
+    }
+
+    @if (authFacade.isUserLoggedOut$ | async) {
+        <button mat-list-item class="sidenav__login_logout" (click)="login()" [attr.aria-label]="login">
+            <mat-icon class="sidenav__icon">login</mat-icon>
+            <span class="sidenav__caption">einloggen</span>
+        </button>
+    } @else {
+        <button mat-list-item class="sidenav__login_logout" (click)="logout()" [attr.aria-label]="logout">
+            <mat-icon class="sidenav__icon">logout</mat-icon>
+            <span class="sidenav__caption">ausloggen</span>
+        </button>
+    }
+
+    <div class="sidenav__footer">
+        <div class="sidenav__version">V {{ config.version }}</div>
+    </div>
+</mat-nav-list>

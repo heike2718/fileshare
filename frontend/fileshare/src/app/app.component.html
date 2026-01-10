@@ -1,0 +1,15 @@
+<div class="mat-app-background, light-theme">
+    <fs-loading-indicator></fs-loading-indicator>
+    <mat-sidenav-container>
+        <mat-sidenav #sidenav mode="push" [opened]="false" role="navigation">
+            <fs-sidenav (sidenavClose)="sidenav.close()"></fs-sidenav>
+        </mat-sidenav>
+        <mat-sidenav-content>
+            <fs-navbar #navbar (sidenavToggle)="sidenav.toggle()"></fs-navbar>
+            <fs-message></fs-message>
+            <main>
+                <router-outlet></router-outlet>
+            </main>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

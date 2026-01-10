@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.egladil.web</groupId>
+  <artifactId>fileshare</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <compiler-plugin.version>3.14.1</compiler-plugin.version>
+    <maven.compiler.release>21</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+    <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+    <quarkus.platform.version>3.30.6</quarkus.platform.version>
+
+
+    <lombock.version>1.18.42</lombock.version>
+
+    <egladil-secure-tokens.version>1.0.0</egladil-secure-tokens.version>
+    <!-- Start mixin-properties -->
+    <pmd.failOnViolation>true</pmd.failOnViolation>
+    <spotbugs.failOnError>true</spotbugs.failOnError>
+    <jacoco.exclusion-1>**/*Dto*.class</jacoco.exclusion-1>
+    <jacoco.exclusion-2>**/*Application*.class</jacoco.exclusion-2>
+    <jacoco.exclusion-3>**/ResponseStatus.class</jacoco.exclusion-3>
+    <jacoco.exclusion-4>**/healthchecks/**</jacoco.exclusion-4>
+
+    <mixin-maven-plugin.version>1.0.6</mixin-maven-plugin.version>
+    <egladil-maven-mixins.version>1.0.1</egladil-maven-mixins.version>
+
+    <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+    <!-- Ende mixin-propetries -->
+
+    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.parameters>true</maven.compiler.parameters>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>${quarkus.platform.artifact-id}</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>de.egladil.web</groupId>
+      <artifactId>egladil-secure-tokens</artifactId>
+      <version>${egladil-secure-tokens.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client-jackson</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-jackson</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-reactive-routes</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-openapi</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-validator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-arc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombock.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.slf4j</groupId>
+      <artifactId>slf4j-jboss-logmanager</artifactId>
+    </dependency>
+
+    <!-- test scoped -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5-mockito</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-test-security</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jacoco</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>quarkus-maven-plugin</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+              <goal>generate-code</goal>
+              <goal>generate-code-tests</goal>
+              <goal>native-image-agent</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.playtika.maven.plugins</groupId>
+        <artifactId>mixin-maven-plugin</artifactId>
+        <version>${mixin-maven-plugin.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <mixins>
+            <mixin>
+              <groupId>de.egladil</groupId>
+              <artifactId>java-core-mixin</artifactId>
+              <version>${egladil-maven-mixins.version}</version>
+            </mixin>
+            <mixin>
+              <groupId>de.egladil</groupId>
+              <artifactId>java-linting-mixin</artifactId>
+              <version>${egladil-maven-mixins.version}</version>
+            </mixin>
+            <mixin>
+              <groupId>de.egladil</groupId>
+              <artifactId>java-code-quality-mixin</artifactId>
+              <version>${egladil-maven-mixins.version}</version>
+            </mixin>
+            <mixin>
+              <groupId>de.egladil</groupId>
+              <artifactId>java-quarkustest-coverage-mixin</artifactId>
+              <version>${egladil-maven-mixins.version}</version>
+            </mixin>
+            <mixin>
+              <groupId>de.egladil</groupId>
+              <artifactId>java-security-mixin</artifactId>
+              <version>${egladil-maven-mixins.version}</version>
+            </mixin>
+          </mixins>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>com.rudikershaw.gitbuildhook</groupId>
+        <artifactId>git-build-hook-maven-plugin</artifactId>
+        <version>3.6.0</version>
+        <configuration>
+          <gitConfig>
+            <!-- The location of the directory you are using to store the Git hooks in your project. -->
+            <core.hooksPath>../../.git-hooks/</core.hooksPath>
+            <!-- Some other project specific git config that you want to set. -->
+            <custom.configuration>true</custom.configuration>
+          </gitConfig>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <!-- Sets git config specified under configuration > gitConfig. -->
+              <goal>configure</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
+
+
+  </build>
+
+  <profiles>
+    <profile>
+      <id>native</id>
+      <activation>
+        <property>
+          <name>native</name>
+        </property>
+      </activation>
+      <properties>
+        <quarkus.package.jar.enabled>false</quarkus.package.jar.enabled>
+        <skipITs>false</skipITs>
+        <quarkus.native.enabled>true</quarkus.native.enabled>
+      </properties>
+    </profile>
+  </profiles>
+</project>
