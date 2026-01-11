@@ -5,10 +5,9 @@
 
 package de.egladil.web.fileshare.domain.exceptions;
 
-@Deprecated
-public class InaccessableEndpointException extends RuntimeException {
+public class InacceptablePayloadException extends RuntimeException{
 
-  public InaccessableEndpointException(String message) {
+  public InacceptablePayloadException(String message) {
     super(message);
   }
 }

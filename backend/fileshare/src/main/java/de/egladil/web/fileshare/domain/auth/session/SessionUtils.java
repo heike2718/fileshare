@@ -31,11 +31,11 @@ public final class SessionUtils {
   /**
    * Berechnet den expiresAt-Zeitpunkt mit dem gegebenen idle timout.
    *
-   * @param sessionIdleTimeoutMinutes int Anzahl Minuten, nach denen eine Session
+   * @param sessionIdleTimeoutMinutes Integer Anzahl Minuten, nach denen eine Session
    *                                  als idle weggeräumt wird.
    * @return long
    */
-  public static long getExpiresAt(final int sessionIdleTimeoutMinutes) {
+  public static long getExpiresAt(final Integer sessionIdleTimeoutMinutes) {
     ZoneId zoneId = ZoneId.systemDefault();
     Instant instant = LocalDateTime
         .now(zoneId)
@@ -52,11 +52,11 @@ public final class SessionUtils {
    *
    * @param now               LocalDateTime
    * @param session           Session
-   * @param maxSessionSeconds int maximale Lebenszeit in Sekunden
+   * @param maxSessionSeconds Integer maximale Lebenszeit in Sekunden
    * @return boolean
    */
   public static boolean isSessionExpieredOrDead(LocalDateTime now, Session session,
-      int maxSessionSeconds) {
+      Integer maxSessionSeconds) {
     LocalDateTime expireDateTime = LocalDateTime
         .ofInstant(Instant.ofEpochMilli(session.getExpiresAt()), ZoneId.systemDefault())
         .plusSeconds(5); // bissel Toleranz lassen, oder?

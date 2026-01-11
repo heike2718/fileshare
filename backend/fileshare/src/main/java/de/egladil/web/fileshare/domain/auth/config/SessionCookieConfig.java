@@ -5,8 +5,10 @@
 
 package de.egladil.web.fileshare.domain.auth.config;
 
+import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
 
+@StaticInitSafe
 @ConfigMapping(prefix = "session-cookie")
 public interface SessionCookieConfig {
 

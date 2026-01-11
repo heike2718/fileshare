@@ -18,8 +18,7 @@ import java.util.stream.Collectors;
 
 @Provider
 @Priority(1500)
-public class ConstraintViolationExceptionMapper implements
-    ExceptionMapper<ConstraintViolationException> {
+public class ConstraintViolationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
 
   @Override
   public Response toResponse(final ConstraintViolationException exception) {

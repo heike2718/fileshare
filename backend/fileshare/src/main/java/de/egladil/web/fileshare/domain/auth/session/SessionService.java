@@ -40,10 +40,10 @@ public class SessionService {
   private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
   @ConfigProperty(name = "session.idle.timeout.minutes")
-  int sessionIdleTimeoutMinutes;
+  Integer sessionIdleTimeoutMinutes;
 
-  @ConfigProperty(name = "session.lifetime.seconds", defaultValue = "86400")
-  int maxSessionLifetimeSeconds;
+  @ConfigProperty(name = "session.lifetime.seconds")
+  Integer maxSessionLifetimeSeconds;
 
   @Inject
   JWTParser jwtParser;
@@ -88,14 +88,7 @@ public class SessionService {
     session.setAuthenticatedUser(authenticatedUser);
     session.setUser(publicUser);
     session.setCreatedAt(System.currentTimeMillis());
-
-    int theIdleTimeoutMinutes = sessionIdleTimeoutMinutes == 0 ? 120 : sessionIdleTimeoutMinutes;
-
-    if (sessionIdleTimeoutMinutes == 0) {
-      LOGGER.warn("session.idle.timeout.minutes=0 => verwenden default 120 min");
-    }
-
-    session.setExpiresAt(SessionUtils.getExpiresAt(theIdleTimeoutMinutes));
+    session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
     session.setSessionActive(true);
     sessions.put(session.getSessionId(), session);
 
@@ -141,14 +134,8 @@ public class SessionService {
   }
 
   private void checkExpiredOrDead(Session session) {
-    int maxLifetime = this.maxSessionLifetimeSeconds == 0 ? 86400 : this.maxSessionLifetimeSeconds;
-
-    if (sessionIdleTimeoutMinutes == 0) {
-      LOGGER.warn("session.lifetime.seconds=0 => verwenden default 86400 min");
-    }
-
-    LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
-    if (SessionUtils.isSessionExpieredOrDead(now, session, maxLifetime)) {
+   LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
+    if (SessionUtils.isSessionExpieredOrDead(now, session, maxSessionLifetimeSeconds)) {
       LOGGER.info("expired or dead session");
       sessions.remove(session.getSessionId());
       throw new SessionExpiredException("Die Session ist abgelaufen. Bitte neu einloggen.");

@@ -16,11 +16,15 @@
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.30.6</quarkus.platform.version>
 
-
     <lombock.version>1.18.42</lombock.version>
 
     <egladil-secure-tokens.version>1.0.0</egladil-secure-tokens.version>
+
+    <mixin-maven-plugin.version>1.0.6</mixin-maven-plugin.version>
+    <egladil-maven-mixins.version>1.0.1</egladil-maven-mixins.version>
+
     <!-- Start mixin-properties -->
+    <maven.compiler.release>21</maven.compiler.release>
     <pmd.failOnViolation>true</pmd.failOnViolation>
     <spotbugs.failOnError>true</spotbugs.failOnError>
     <jacoco.exclusion-1>**/*Dto*.class</jacoco.exclusion-1>
@@ -28,14 +32,10 @@
     <jacoco.exclusion-3>**/ResponseStatus.class</jacoco.exclusion-3>
     <jacoco.exclusion-4>**/healthchecks/**</jacoco.exclusion-4>
 
-    <mixin-maven-plugin.version>1.0.6</mixin-maven-plugin.version>
-    <egladil-maven-mixins.version>1.0.1</egladil-maven-mixins.version>
-
     <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+    <maven.compiler.parameters>true</maven.compiler.parameters>
     <!-- Ende mixin-propetries -->
 
-    <maven.compiler.release>21</maven.compiler.release>
-    <maven.compiler.parameters>true</maven.compiler.parameters>
   </properties>
 
   <dependencyManagement>

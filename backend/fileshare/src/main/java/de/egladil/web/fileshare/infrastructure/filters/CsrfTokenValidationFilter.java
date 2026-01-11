@@ -43,6 +43,9 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
   private static final List<String> SECURE_PATHS = Arrays
       .asList(new String[] { "/api", "/api/session/login", "/api/session/logout" });
 
+  @ConfigProperty(name = "csrf-disabled")
+  boolean csrfDisabled;
+
   @ConfigProperty(name = "csrf-header-name")
   String csrfHeaderName;
 
@@ -66,6 +69,11 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
     String method = requestContext.getMethod();
 
     if (SECURE_HTTP_METHODS.contains(method) || SECURE_PATHS.contains(path)) {
+      return;
+    }
+
+    if (csrfDisabled) {
+      LOGGER.warn("csrf token validation is disabled!");
       return;
     }
 

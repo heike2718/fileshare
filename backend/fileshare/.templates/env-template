@@ -3,6 +3,8 @@ STAGE=DEV
 #SESSION_IDLE_TIMEOUT.MINUTES=1
 #SESSION_LIFETIME_SECONDS=90
 
+FILESHARE_UPLOAD_DIR=/home/heike/git/fileshare/files
+
 TARGET_ORIGIN=localhost:4200,localhost:9850
 QUARKUS_HTTP_CORS_ORIGINS=http://localhost:9850,http://localhost:4200
 
