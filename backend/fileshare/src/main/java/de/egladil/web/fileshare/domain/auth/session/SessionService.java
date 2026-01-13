@@ -1,165 +1,163 @@
-//=====================================================
+// =====================================================
 // Projekt: fileshare
 // (c) Heike Winkelvoß
-//=====================================================
+// =====================================================
 
 package de.egladil.web.fileshare.domain.auth.session;
 
-import de.egladil.web.egladil_secure_tokens.SecureRandomGenerator;
-import de.egladil.web.fileshare.domain.auth.config.SessionCookieConfig;
-import de.egladil.web.fileshare.domain.auth.jwt.JwtReader;
-import de.egladil.web.fileshare.domain.exceptions.FileshareRuntimeException;
-import de.egladil.web.fileshare.domain.exceptions.SessionExpiredException;
-import io.quarkus.security.identity.SecurityIdentity;
-import io.smallrye.jwt.auth.principal.JWTParser;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.concurrent.ConcurrentHashMap;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.NewCookie;
-import jakarta.ws.rs.core.NewCookie.SameSite;
 import jakarta.ws.rs.core.Response.Status;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.concurrent.ConcurrentHashMap;
+
+import io.quarkus.security.identity.SecurityIdentity;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+
+import io.smallrye.jwt.auth.principal.JWTParser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import de.egladil.web.egladil_secure_tokens.SecureRandomGenerator;
+import de.egladil.web.fileshare.domain.auth.jwt.JwtReader;
+import de.egladil.web.fileshare.domain.exceptions.FileshareRuntimeException;
+import de.egladil.web.fileshare.domain.exceptions.SessionExpiredException;
 
 @ApplicationScoped
 public class SessionService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SessionService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionService.class);
 
-  private final SecureRandomGenerator secureRandomGenerator = new SecureRandomGenerator();
+    private final SecureRandomGenerator secureRandomGenerator = new SecureRandomGenerator();
 
-  private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
-  @ConfigProperty(name = "session.idle.timeout.minutes")
-  Integer sessionIdleTimeoutMinutes;
+    @ConfigProperty(name = "session.idle.timeout.minutes")
+    Integer sessionIdleTimeoutMinutes;
 
-  @ConfigProperty(name = "session.lifetime.seconds")
-  Integer maxSessionLifetimeSeconds;
+    @ConfigProperty(name = "session.lifetime.seconds")
+    Integer maxSessionLifetimeSeconds;
 
-  @Inject
-  JWTParser jwtParser;
+    @Inject
+    JWTParser jwtParser;
 
-  @Inject
-  JwtReader jwtReader;
+    @Inject
+    JwtReader jwtReader;
 
-  @Inject
-  SecurityIdentity securityIdentity;
+    @Inject
+    SecurityIdentity securityIdentity;
 
-  /**
-   * Erzeugt eine neue Session.
-   *
-   * @param rawJwt das JWT vom iam.
-   * @return Session
-   */
-  public Session initSession(final String rawJwt) {
+    /**
+     * Erzeugt eine neue Session.
+     *
+     * @param rawJwt das JWT vom iam.
+     * @return Session
+     */
+    public Session initSession(final String rawJwt) {
 
-    final JsonWebToken token;
-    try {
-      token = jwtParser.parse(rawJwt);
-    } catch (Exception e) {
-      throw new FileshareRuntimeException("JWT invalid", e);
-    }
+        final JsonWebToken token;
+        try {
+            token = jwtParser.parse(rawJwt);
+        } catch (Exception e) {
+            throw new FileshareRuntimeException("JWT invalid", e);
+        }
 
-    final String uuid = jwtReader.getSubject(token);
-    final String userIdReference =
-        uuid.substring(0, 8) + "_" + secureRandomGenerator.generateSecureRandomHex(32);
+        final String uuid = jwtReader.getSubject(token);
+        final String userIdReference = uuid.substring(0, 8) + "_" + secureRandomGenerator.generateSecureRandomHex(32);
 
-    AuthenticatedUser authenticatedUser = new AuthenticatedUser(uuid)
-        .withFullName(jwtReader.getFullName(token))
-        .withIdReference(userIdReference)
-        .withRoles(jwtReader.getGroups(token));
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser(uuid)
+                .withFullName(jwtReader.getFullName(token))
+                .withIdReference(userIdReference)
+                .withRoles(jwtReader.getGroups(token));
 
-    UserDto publicUser = UserDto
-        .builder()
-        .fullName(authenticatedUser.getFullName())
-        .roles(authenticatedUser.getRoles())
-        .build();
+        UserDto publicUser = UserDto
+                .builder()
+                .fullName(authenticatedUser.getFullName())
+                .roles(authenticatedUser.getRoles())
+                .build();
 
-    Session session = this.internalCreateAnonymousSession();
-    session.setAuthenticatedUser(authenticatedUser);
-    session.setUser(publicUser);
-    session.setCreatedAt(System.currentTimeMillis());
-    session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
-    session.setSessionActive(true);
-    sessions.put(session.getSessionId(), session);
-
-    LOGGER.info("Benutzer eingeloggt: {}", session.getAuthenticatedUser().toString());
-
-    return session;
-  }
-
-  private Session internalCreateAnonymousSession() {
-
-    String sessionId = secureRandomGenerator.generateSecureRandomHex(32);
-    return Session.createAnonymous(sessionId);
-  }
-
-  /**
-   * Läd eine Session neu, sofern sie existiert.
-   *
-   * @return Session
-   * @throws WebApplicationException wenn es keine session gibt
-   * @throws SessionExpiredException wenn sie abgelaufen ist oder ihr Lebensende
-   *                                 überschritten hat.
-   */
-  public Session reloadSession() throws SessionExpiredException, WebApplicationException {
-
-    String sessionId = this.getCurrentSessionId();
-
-    if (sessionId != null) {
-      Session session = sessions.get(sessionId);
-
-      if (session != null) {
-        checkExpiredOrDead(session);
+        Session session = this.internalCreateAnonymousSession();
+        session.setAuthenticatedUser(authenticatedUser);
+        session.setUser(publicUser);
+        session.setCreatedAt(System.currentTimeMillis());
         session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
+        session.setSessionActive(true);
+        sessions.put(session.getSessionId(), session);
+
+        LOGGER.info("Benutzer eingeloggt: {}", session.getAuthenticatedUser().toString());
+
         return session;
-      }
     }
 
-    LOGGER.error("possible bot attack? keine session bekannt ");
-    throw new WebApplicationException(Status.UNAUTHORIZED);
-  }
+    private Session internalCreateAnonymousSession() {
 
-  private String getCurrentSessionId() {
-    return securityIdentity.getAttribute(SessionUtils.SESSION_ID_ATTRIBUTE_NAME);
-  }
-
-  private void checkExpiredOrDead(Session session) {
-   LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
-    if (SessionUtils.isSessionExpieredOrDead(now, session, maxSessionLifetimeSeconds)) {
-      LOGGER.info("expired or dead session");
-      sessions.remove(session.getSessionId());
-      throw new SessionExpiredException("Die Session ist abgelaufen. Bitte neu einloggen.");
-    }
-  }
-
-  /**
-   * Löscht die Session.
-   *
-   * @param sessionId String
-   */
-  public void invalidateSession(final String sessionId) {
-
-    if (sessionId == null) {
-
-      LOGGER.debug("invalidateSession ohne sessionId aufgerufen");
-      return;
+        String sessionId = secureRandomGenerator.generateSecureRandomHex(32);
+        return Session.createAnonymous(sessionId);
     }
 
-    Session session = this.sessions.remove(sessionId);
+    /**
+     * Läd eine Session neu, sofern sie existiert.
+     *
+     * @return Session
+     * @throws WebApplicationException wenn es keine session gibt
+     * @throws SessionExpiredException wenn sie abgelaufen ist oder ihr Lebensende
+     *                                 überschritten hat.
+     */
+    public Session reloadSession() throws SessionExpiredException, WebApplicationException {
 
-    if (session != null && !session.isAnonym()) {
+        String sessionId = this.getCurrentSessionId();
 
-      LOGGER.info("BenutzerDto ausgeloggt: {}", session.getAuthenticatedUser().toString());
+        if (sessionId != null) {
+            Session session = sessions.get(sessionId);
+
+            if (session != null) {
+                checkExpiredOrDead(session);
+                session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
+                return session;
+            }
+        }
+
+        LOGGER.error("possible bot attack? keine session bekannt ");
+        throw new WebApplicationException(Status.UNAUTHORIZED);
     }
-  }
+
+    private String getCurrentSessionId() {
+        return securityIdentity.getAttribute(SessionUtils.SESSION_ID_ATTRIBUTE_NAME);
+    }
+
+    private void checkExpiredOrDead(Session session) {
+        LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
+        if (SessionUtils.isSessionExpieredOrDead(now, session, maxSessionLifetimeSeconds)) {
+            LOGGER.info("expired or dead session");
+            sessions.remove(session.getSessionId());
+            throw new SessionExpiredException("Die Session ist abgelaufen. Bitte neu einloggen.");
+        }
+    }
+
+    /**
+     * Löscht die Session.
+     *
+     * @param sessionId String
+     */
+    public void invalidateSession(final String sessionId) {
+
+        if (sessionId == null) {
+
+            LOGGER.debug("invalidateSession ohne sessionId aufgerufen");
+            return;
+        }
+
+        Session session = this.sessions.remove(sessionId);
+
+        if (session != null && !session.isAnonym()) {
+
+            LOGGER.info("BenutzerDto ausgeloggt: {}", session.getAuthenticatedUser().toString());
+        }
+    }
 }

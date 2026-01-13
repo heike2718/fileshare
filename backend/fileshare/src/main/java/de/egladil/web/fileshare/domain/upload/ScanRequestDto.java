@@ -1,18 +1,22 @@
-//=====================================================
+// =====================================================
 // Projekt: fileshare
 // (c) Heike Winkelvoß
-//=====================================================
+// =====================================================
 
 package de.egladil.web.fileshare.domain.upload;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import de.egladil.web.fileshare.domain.core.FileDto;
 import jakarta.validation.constraints.NotNull;
+
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import de.egladil.web.fileshare.domain.core.FileDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Data
 @Builder
@@ -22,15 +26,15 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @lombok.extern.jackson.Jacksonized
 public class ScanRequestDto {
 
-  @JsonProperty
-  @NotNull
-  private String clientId;
+    @JsonProperty
+    @NotNull
+    private String clientId;
 
-  @JsonProperty
-  private String fileOwner;
+    @JsonProperty
+    private String fileOwner;
 
-  @JsonProperty
-  @NotNull
-  private FileDto upload;
+    @JsonProperty
+    @NotNull
+    private FileDto upload;
 
 }

@@ -1,42 +1,44 @@
-//=====================================================
+// =====================================================
 // Projekt: fileshare
 // (c) Heike Winkelvoß
-//=====================================================
+// =====================================================
 
 package de.egladil.web.fileshare.infrastructure.error;
 
-import de.egladil.web.fileshare.domain.core.ErrorLevel;
-import de.egladil.web.fileshare.domain.core.ErrorResponseDto;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
 import jakarta.annotation.Priority;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
-import java.util.Comparator;
-import java.util.stream.Collectors;
+
+import de.egladil.web.fileshare.domain.core.ErrorLevel;
+import de.egladil.web.fileshare.domain.core.ErrorResponseDto;
 
 @Provider
 @Priority(1500)
 public class ConstraintViolationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
 
-  @Override
-  public Response toResponse(final ConstraintViolationException exception) {
-    final ErrorResponseDto responsePayload = ErrorResponseDto
-        .builder()
-        .errorLevel(ErrorLevel.ERROR)
-        .message("Inputvalidierung fehlgeschlagen: " + extractMessagesSorted(exception))
-        .build();
+    @Override
+    public Response toResponse(final ConstraintViolationException exception) {
+        final ErrorResponseDto responsePayload = ErrorResponseDto
+                .builder()
+                .errorLevel(ErrorLevel.ERROR)
+                .message("Inputvalidierung fehlgeschlagen: " + extractMessagesSorted(exception))
+                .build();
 
-    return Response.status(Response.Status.BAD_REQUEST).entity(responsePayload).build();
-  }
+        return Response.status(Response.Status.BAD_REQUEST).entity(responsePayload).build();
+    }
 
-  private String extractMessagesSorted(final ConstraintViolationException exception) {
-    return exception
-        .getConstraintViolations()
-        .stream()
-        .sorted(Comparator.comparing(violation -> violation.getPropertyPath().toString()))
-        .map(ConstraintViolation::getMessage)
-        .collect(Collectors.joining("; "));
-  }
+    private String extractMessagesSorted(final ConstraintViolationException exception) {
+        return exception
+                .getConstraintViolations()
+                .stream()
+                .sorted(Comparator.comparing(violation -> violation.getPropertyPath().toString()))
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.joining("; "));
+    }
 }

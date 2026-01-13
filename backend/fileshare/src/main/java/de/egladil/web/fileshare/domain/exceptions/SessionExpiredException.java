@@ -1,13 +1,13 @@
-//=====================================================
+// =====================================================
 // Projekt: fileshare
 // (c) Heike Winkelvoß
-//=====================================================
+// =====================================================
 
 package de.egladil.web.fileshare.domain.exceptions;
 
 public class SessionExpiredException extends RuntimeException {
 
-  public SessionExpiredException(String message) {
-    super(message);
-  }
+    public SessionExpiredException(String message) {
+        super(message);
+    }
 }

@@ -1,16 +1,18 @@
-//=====================================================
+// =====================================================
 // Projekt: fileshare
 // (c) Heike Winkelvoß
-//=====================================================
+// =====================================================
 
 package de.egladil.web.fileshare.domain.upload;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Data
 @Builder
@@ -20,18 +22,18 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @lombok.extern.jackson.Jacksonized
 public class ThreadDetection {
 
-  @JsonProperty
-  private boolean securityThreadDetected;
+    @JsonProperty
+    private boolean securityThreadDetected;
 
-  @JsonProperty
-  private String securityCheckMessage;
+    @JsonProperty
+    private String securityCheckMessage;
 
-  @Override
-  public String toString() {
-    final StringBuilder sb = new StringBuilder("ThreadDetection{");
-    sb.append("securityThreadDetected=").append(securityThreadDetected);
-    sb.append(", securityCheckMessage='").append(securityCheckMessage).append('\'');
-    sb.append('}');
-    return sb.toString();
-  }
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ThreadDetection{");
+        sb.append("securityThreadDetected=").append(securityThreadDetected);
+        sb.append(", securityCheckMessage='").append(securityCheckMessage).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -1,89 +1,91 @@
-//=====================================================
+// =====================================================
 // Projekt: fileshare
 // (c) Heike Winkelvoß
-//=====================================================
+// =====================================================
 
 package de.egladil.web.fileshare.domain.auth.session;
 
-import io.quarkus.security.runtime.QuarkusPrincipal;
 import java.util.Objects;
+
+import io.quarkus.security.runtime.QuarkusPrincipal;
+
 import org.apache.commons.lang3.StringUtils;
 
-public class AuthenticatedUser extends QuarkusPrincipal  {
+public class AuthenticatedUser extends QuarkusPrincipal {
 
-  private String uuid; // subject
+    private String uuid; // subject
 
-  private String fullName; // claim full_name
+    private String fullName; // claim full_name
 
-  private String idReference; // wie bisher generiert
+    private String idReference; // wie bisher generiert
 
-  private String[] roles;
+    private String[] roles;
 
-  public AuthenticatedUser(String uuid) {
-    super(uuid);
-    this.uuid = uuid;
-  }
-
-  @Override
-  public String toString() {
-    return "AuthenticatedUser [uuid=" + StringUtils.abbreviate(getName(), 11) + "]";
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+    public AuthenticatedUser(String uuid) {
+        super(uuid);
+        this.uuid = uuid;
     }
-    if (!super.equals(o)) {
-      return false;
+
+    @Override
+    public String toString() {
+        return "AuthenticatedUser [uuid=" + StringUtils.abbreviate(getName(), 11) + "]";
     }
-    AuthenticatedUser that = (AuthenticatedUser) o;
-    return Objects.equals(uuid, that.uuid);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(super.hashCode(), uuid);
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        AuthenticatedUser that = (AuthenticatedUser) o;
+        return Objects.equals(uuid, that.uuid);
+    }
 
-  @Override
-  public String getName() {
-    return this.uuid;
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), uuid);
+    }
 
-  public String getUuid() {
-    return uuid;
-  }
+    @Override
+    public String getName() {
+        return this.uuid;
+    }
 
-  public AuthenticatedUser withUuid(String uuid) {
-    this.uuid = uuid;
-    return this;
-  }
+    public String getUuid() {
+        return uuid;
+    }
 
-  public String getFullName() {
-    return fullName;
-  }
+    public AuthenticatedUser withUuid(String uuid) {
+        this.uuid = uuid;
+        return this;
+    }
 
-  public AuthenticatedUser withFullName(String fullName) {
-    this.fullName = fullName;
-    return this;
-  }
+    public String getFullName() {
+        return fullName;
+    }
 
-  public String getIdReference() {
-    return idReference;
-  }
+    public AuthenticatedUser withFullName(String fullName) {
+        this.fullName = fullName;
+        return this;
+    }
 
-  public AuthenticatedUser withIdReference(String idReference) {
-    this.idReference = idReference;
-    return this;
-  }
+    public String getIdReference() {
+        return idReference;
+    }
 
-  public String[] getRoles() {
-    return roles;
-  }
+    public AuthenticatedUser withIdReference(String idReference) {
+        this.idReference = idReference;
+        return this;
+    }
 
-  public AuthenticatedUser withRoles(String[] roles) {
-    this.roles = roles;
-    return this;
-  }
+    public String[] getRoles() {
+        return roles;
+    }
+
+    public AuthenticatedUser withRoles(String[] roles) {
+        this.roles = roles;
+        return this;
+    }
 }
