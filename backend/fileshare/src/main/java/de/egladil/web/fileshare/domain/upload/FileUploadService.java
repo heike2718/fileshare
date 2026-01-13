@@ -41,8 +41,6 @@ public class FileUploadService {
 
     uploadScannerDelegate.scanFile(datei);
 
-    // TODO maxBytes werden noch nicht getestet
-
     byte[] decodedBytes;
     try {
       decodedBytes = Base64.getDecoder().decode(datei.getDataBase64());

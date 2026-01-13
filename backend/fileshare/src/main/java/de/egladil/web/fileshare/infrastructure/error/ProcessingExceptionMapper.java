@@ -7,8 +7,8 @@ package de.egladil.web.fileshare.infrastructure.error;
 
 import de.egladil.web.fileshare.domain.core.ErrorLevel;
 import de.egladil.web.fileshare.domain.core.ErrorResponseDto;
-import de.egladil.web.fileshare.domain.exceptions.DownstreamServiceException;
 import jakarta.annotation.Priority;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -18,21 +18,21 @@ import org.slf4j.LoggerFactory;
 
 @Provider
 @Priority(1500)
-public class DownstreamServiceExceptionMapper implements ExceptionMapper<DownstreamServiceException> {
+public class ProcessingExceptionMapper implements ExceptionMapper<ProcessingException> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DownstreamServiceExceptionMapper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ProcessingExceptionMapper.class);
 
   @Override
-  public Response toResponse(DownstreamServiceException exception) {
+  public Response toResponse(ProcessingException exception) {
 
-    LOGGER.error("{}: {}", exception.getRestClientType(), exception.getMessage());
+    LOGGER.error("einer der backend-Dienste ist gerade nicht da: {}", exception.getMessage(), exception);
 
     final ErrorResponseDto responsePayload = ErrorResponseDto
         .builder()
         .errorLevel(ErrorLevel.ERROR)
-        .message(exception.getRestClientType() + " hat ein Problem.")
+        .message("Einer der backend-Dienste ist gerade nicht nicht erreichbar.")
         .build();
 
-    return Response.status(Status.BAD_GATEWAY).entity(responsePayload).build();
+    return Response.status(Status.SERVICE_UNAVAILABLE).entity(responsePayload).build();
   }
 }

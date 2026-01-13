@@ -5,6 +5,7 @@
 
 package de.egladil.web.fileshare.infrastructure.restclient;
 
+import de.egladil.web.fileshare.domain.exceptions.DownstreamServiceException;
 import de.egladil.web.fileshare.domain.exceptions.FileshareRuntimeException;
 import de.egladil.web.fileshare.domain.upload.FilescannerResponseDto;
 import de.egladil.web.fileshare.domain.upload.ScanRequestDto;
@@ -17,7 +18,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @RegisterRestClient(configKey = "filescanner")
@@ -46,17 +46,16 @@ public interface FilescannerRestClient {
       return null;
     }
 
-    if (status == 500) {
-      throw new FileshareRuntimeException("status 500 vom filescanner. Mal dort ins log schauen.");
+    if (status == 400) {
+      throw new FileshareRuntimeException("Antwort 400 - BAD_REQUEST vom filescanner. Implementierungsfehler?");
     }
 
     if (status == 401) {
-      throw new FileshareRuntimeException(
-          "status 401 vom filescanner. Mal clientId hier und im filescanner prüfen");
+      throw new DownstreamServiceException(
+          "client-Authentifizierung fehlgeschlagen. Mal clientId hier und im filescanner prüfen", RestClientType.filescanner);
     }
 
-    return new FileshareRuntimeException(
-        "unerwarteter status " + status + " vom filescanner. Haben wir nicht mit gerechnet");
+    return new DownstreamServiceException(
+        "unerwarteter status " + status + ". Haben wir nicht mit gerechnet", RestClientType.filescanner);
   }
-
 }

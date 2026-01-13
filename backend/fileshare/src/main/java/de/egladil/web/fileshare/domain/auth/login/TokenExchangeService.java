@@ -10,7 +10,6 @@ import de.egladil.web.fileshare.domain.auth.dto.MessagePayload;
 import de.egladil.web.fileshare.domain.auth.dto.ResponsePayload;
 import de.egladil.web.fileshare.domain.exceptions.ClientAuthException;
 import de.egladil.web.fileshare.domain.exceptions.FileshareRuntimeException;
-import de.egladil.web.fileshare.domain.exceptions.InaccessableEndpointException;
 import de.egladil.web.fileshare.infrastructure.restclient.AuthproviderRestClient;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -50,24 +49,6 @@ public class TokenExchangeService {
       ResponsePayload responsePayload = response.readEntity(ResponsePayload.class);
 
       return this.checkNonceAndExtractTheJwt(nonce, responsePayload);
-
-    } catch (WebApplicationException e) {
-
-      ResponsePayload responsePayload = e.getResponse().readEntity(ResponsePayload.class);
-
-      MessagePayload messagePayload = responsePayload.getMessage();
-
-      String message = "Konnte das oneTimeToken nicht gegen das JWT tauschen: " + messagePayload.getMessage();
-
-      LOGGER.error(message);
-
-      throw new FileshareRuntimeException(message);
-
-    } catch (ProcessingException processingException) {
-
-      LOGGER.error("endpoint authprovider ist nicht erreichbar");
-
-      throw new InaccessableEndpointException("Der Endpoint authprovider ist nicht erreichbar. ");
     }
   }
 
