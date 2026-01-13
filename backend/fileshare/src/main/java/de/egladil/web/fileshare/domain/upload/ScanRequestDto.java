@@ -6,7 +6,7 @@
 package de.egladil.web.fileshare.domain.upload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.egladil.web.fileshare.domain.core.DateiDto;
+import de.egladil.web.fileshare.domain.core.FileDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +31,6 @@ public class ScanRequestDto {
 
   @JsonProperty
   @NotNull
-  private DateiDto upload;
+  private FileDto upload;
 
 }

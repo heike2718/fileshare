@@ -5,7 +5,7 @@
 
 package de.egladil.web.fileshare.domain.upload;
 
-import de.egladil.web.fileshare.domain.core.DateiDto;
+import de.egladil.web.fileshare.domain.core.FileDto;
 import de.egladil.web.fileshare.domain.exceptions.SchadcodeException;
 import de.egladil.web.fileshare.infrastructure.restclient.FilescannerRestClient;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -30,14 +30,14 @@ public class UploadScannerDelegate {
   /**
    * Kapselt den Aufruf des Filescanners-
    *
-   * @param dateiDto DateiDto
+   * @param fileDto DateiDto
    * @throws SchadcodeException
    */
-  public void scanFile(DateiDto dateiDto) throws SchadcodeException {
+  public void scanFile(FileDto fileDto) throws SchadcodeException {
 
     String fileOwnerId = securityIdentity.getPrincipal().getName();
 
-    ScanRequestDto scanRequestDto = ScanRequestDto.builder().upload(dateiDto).fileOwner(fileOwnerId)
+    ScanRequestDto scanRequestDto = ScanRequestDto.builder().upload(fileDto).fileOwner(fileOwnerId)
         .clientId(clientId).build();
 
     final FilescannerResponseDto responseDto = fileScannerClient.scanFile(2,

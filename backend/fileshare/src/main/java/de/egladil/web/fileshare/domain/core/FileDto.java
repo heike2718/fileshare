@@ -22,7 +22,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @NoArgsConstructor
 @Schema(description = "eine Datei zum sharen")
 @lombok.extern.jackson.Jacksonized
-public class DateiDto {
+public class FileDto {
 
   @JsonProperty
   @Schema(
@@ -30,7 +30,7 @@ public class DateiDto {
       examples = "datei-zum-transportieren.zip",
       required = true)
   @NotBlank(message = "name ist erforderlich.")
-  @ValidFilename(allowLeadingDot = false)
+  @ValidFilename(allowLeadingDot = true)
   private String name;
 
   @JsonProperty

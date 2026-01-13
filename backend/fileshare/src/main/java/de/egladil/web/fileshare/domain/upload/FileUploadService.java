@@ -5,16 +5,20 @@
 
 package de.egladil.web.fileshare.domain.upload;
 
-import de.egladil.web.fileshare.domain.core.DateiDto;
+import de.egladil.web.fileshare.domain.core.FileDto;
 import de.egladil.web.fileshare.domain.core.FileshareConfig;
+import de.egladil.web.fileshare.domain.exceptions.FileExistsException;
 import de.egladil.web.fileshare.domain.exceptions.FileshareRuntimeException;
 import de.egladil.web.fileshare.domain.exceptions.InacceptablePayloadException;
+import de.egladil.web.fileshare.domain.files.FileInfoDto;
+import de.egladil.web.fileshare.domain.files.FileInfoStorage;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,14 +33,24 @@ public class FileUploadService {
   @Inject
   UploadScannerDelegate uploadScannerDelegate;
 
+  @Inject
+  FileInfoStorage storage;
+
   /**
    * Wenn alles OK ist, wird die Datei ins Filesystem geschrieben.
    *
    * @param datei DateiDto
+   * @return Path
    */
-  public void writeFile(DateiDto datei) {
+  public FileInfoDto writeFile(FileDto datei) {
     if (datei == null || datei.getName() == null || datei.getDataBase64() == null) {
       throw new InacceptablePayloadException("DateiDto unvollständig (name oder daten fehlen)");
+    }
+
+    Optional<FileInfoDto> opt = storage.findByName(datei.getName());
+
+    if (opt.isPresent()) {
+      throw new FileExistsException("Eine Datei mit diesem Namen gibt es schon.");
     }
 
     uploadScannerDelegate.scanFile(datei);
@@ -57,6 +71,9 @@ public class FileUploadService {
     try {
       Files.createDirectories(target.getParent());
       Files.write(target, decodedBytes);
+
+      FileInfoDto fileInfo = storage.fileAdded(target);
+      return fileInfo;
     } catch (IOException e) {
       throw new FileshareRuntimeException("Datei konnte nicht geschrieben werden: " + target, e);
     }
