@@ -17,7 +17,7 @@ import jakarta.validation.ConstraintValidatorContext;
 public class FilenameValidator implements ConstraintValidator<ValidFilename, String> {
 
     // Deine Zeichenmenge (kein Slash/Backslash), plus mindestens 1 Zeichen
-    private static final Pattern ALLOWED = Pattern.compile("^[a-zA-Z0-9_.-]+$");
+    private static final Pattern ALLOWED = Pattern.compile("^[a-zA-Z0-9_.][a-zA-Z0-9_.-]*$");
 
     // Windows-reservierte Gerätenamen (case-insensitive) – sonst knallt es auf
     // Windows
@@ -26,12 +26,11 @@ public class FilenameValidator implements ConstraintValidator<ValidFilename, Str
                     "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9");
 
     private int maxLength;
-    private boolean allowLeadingDot;
+
 
     @Override
     public void initialize(ValidFilename constraintAnnotation) {
         this.maxLength = constraintAnnotation.maxLength();
-        this.allowLeadingDot = constraintAnnotation.allowLeadingDot();
     }
 
     @Override
@@ -45,11 +44,11 @@ public class FilenameValidator implements ConstraintValidator<ValidFilename, Str
         if (!ALLOWED.matcher(value).matches()) {
             return false;
         }
-        if (value.equals(".") || value.equals("..")) {
+        if (value.equals(".")) {
             return false;
         }
-        if (!allowLeadingDot && value.startsWith(".")) {
-            return false;
+        if (value.contains("..")) {
+          return false;
         }
 
         String upper = value.toUpperCase();

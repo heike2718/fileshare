@@ -3,7 +3,7 @@
 // (c) Heike Winkelvoß
 // =====================================================
 
-package de.egladil.web.fileshare.infrastructure.ressources;
+package de.egladil.web.fileshare.infrastructure.resources;
 
 import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.RequestScoped;

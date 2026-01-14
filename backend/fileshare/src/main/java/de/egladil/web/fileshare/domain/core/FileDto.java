@@ -5,6 +5,7 @@
 
 package de.egladil.web.fileshare.domain.core;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -31,7 +32,7 @@ public class FileDto {
     @JsonProperty
     @Schema(description = "Dateiname", examples = "datei-zum-transportieren.zip", required = true)
     @NotBlank(message = "name ist erforderlich.")
-    @ValidFilename(allowLeadingDot = true)
+    @ValidFilename
     private String name;
 
     @JsonProperty

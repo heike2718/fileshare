@@ -5,10 +5,8 @@
 
 package de.egladil.web.fileshare.domain.auth.session;
 
-import java.util.Objects;
-
 import io.quarkus.security.runtime.QuarkusPrincipal;
-
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 
 public class AuthenticatedUser extends QuarkusPrincipal {
@@ -17,7 +15,7 @@ public class AuthenticatedUser extends QuarkusPrincipal {
 
     private String fullName; // claim full_name
 
-    private String idReference; // wie bisher generiert
+    private String idReference;
 
     private String[] roles;
 

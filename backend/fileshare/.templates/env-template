@@ -37,3 +37,5 @@ PUBLIC_REDIRECT_URL=http://localhost:4200
 
 # ---- lokale Entwicklung (authprovider in docker, fileshare von quarkus geserved) ----
 #PUBLIC_REDIRECT_URL=http://localhost:9850/fileshare/
+
+QUARKUS_HTTP_TEST_TIMEOUT=2m

@@ -7,13 +7,12 @@ package de.egladil.web.fileshare.domain.validation;
 
 public final class ValidationPatternsAndMessages {
 
-    /** The constant INPUT_SECURED. */
-    public static final String INPUT_SECURED = "^[a-zA-ZäöüÄÖÜß0-9\\s\"'_\\-.,:;()]*$";
+  public static final String VALID_ID = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
 
-    /** The constant INPUT_SECURED. */
-    public static final String FILENAME = "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,254}$";
+  public static final String INPUT_SECURED = "^[a-zA-ZäöüÄÖÜß0-9\\s\"'_\\-.,:;()]*$";
 
-    /** The constant INVALID_INPUT_MESSAGE_DETAILS. */
-    public static final String INVALID_INPUT_MESSAGE_DETAILS = "Erlaubt sind Buchstaben, Ziffern, Leerzeichen, und die Sonderzeichen ( ) , ; _ - \" . :"
-            + " Wenn das nicht ausreicht, bitte an die Entwicklung wenden.";
+  public static final String INVALID_FILENAME_MESSAGE_DETAILS =
+      "Erlaubt sind ASCII-Buchstaben, Ziffern und die Sonderzeichen . _ -. Minus darf nicht am Anfang stehen. Länge max = 255";
+
+  public static final String INVALID_ID_MESSAGE = "id enthält ungültige Zeichen (muss eine UUID-4 sein)";
 }

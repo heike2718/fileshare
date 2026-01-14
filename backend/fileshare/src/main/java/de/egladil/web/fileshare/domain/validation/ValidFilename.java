@@ -20,7 +20,7 @@ import jakarta.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidFilename {
 
-    String message() default "Ungültiger Dateiname";
+    String message() default "Ungültiger Dateiname " + ValidationPatternsAndMessages.INVALID_FILENAME_MESSAGE_DETAILS;
 
     Class<?>[] groups() default {};
 
@@ -30,9 +30,4 @@ public @interface ValidFilename {
      * Max. Länge (plattformneutral). 255 ist ein praktikabler Default.
      */
     int maxLength() default 255;
-
-    /**
-     * Falls du "."-Dateien grundsätzlich verbieten willst.
-     */
-    boolean allowLeadingDot() default false;
 }

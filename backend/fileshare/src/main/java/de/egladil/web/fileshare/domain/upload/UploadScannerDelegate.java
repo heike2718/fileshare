@@ -60,8 +60,15 @@ public class UploadScannerDelegate {
             return false;
         }
 
-        return responseDto.getThreadDetection().isSecurityThreadDetected()
-                || responseDto.getVirusDetection().isVirusDetected();
+        if (responseDto.getThreadDetection() != null && responseDto.getThreadDetection().isSecurityThreadDetected()) {
+          return true;
+        }
+
+        if (responseDto.getVirusDetection() != null && responseDto.getVirusDetection().isVirusDetected()) {
+          return true;
+        }
+
+        return false;
     }
 
 }
