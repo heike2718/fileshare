@@ -221,45 +221,6 @@
           </mixins>
         </configuration>
       </plugin>
-
-      <plugin>
-        <groupId>com.rudikershaw.gitbuildhook</groupId>
-        <artifactId>git-build-hook-maven-plugin</artifactId>
-        <version>3.6.0</version>
-        <configuration>
-          <gitConfig>
-            <!-- The location of the directory you are using to store the Git hooks in your project. -->
-            <core.hooksPath>../../.git-hooks/</core.hooksPath>
-            <!-- Some other project specific git config that you want to set. -->
-            <custom.configuration>true</custom.configuration>
-          </gitConfig>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <!-- Sets git config specified under configuration > gitConfig. -->
-              <goal>configure</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
-
   </build>
-
-  <profiles>
-    <profile>
-      <id>native</id>
-      <activation>
-        <property>
-          <name>native</name>
-        </property>
-      </activation>
-      <properties>
-        <quarkus.package.jar.enabled>false</quarkus.package.jar.enabled>
-        <skipITs>false</skipITs>
-        <quarkus.native.enabled>true</quarkus.native.enabled>
-      </properties>
-    </profile>
-  </profiles>
 </project>

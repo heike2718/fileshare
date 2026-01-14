@@ -5,8 +5,10 @@
 
 package de.egladil.web.fileshare.domain.auth.session;
 
-import io.quarkus.security.runtime.QuarkusPrincipal;
 import java.util.Objects;
+
+import io.quarkus.security.runtime.QuarkusPrincipal;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class AuthenticatedUser extends QuarkusPrincipal {

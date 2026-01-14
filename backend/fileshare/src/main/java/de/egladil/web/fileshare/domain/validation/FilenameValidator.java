@@ -27,7 +27,6 @@ public class FilenameValidator implements ConstraintValidator<ValidFilename, Str
 
     private int maxLength;
 
-
     @Override
     public void initialize(ValidFilename constraintAnnotation) {
         this.maxLength = constraintAnnotation.maxLength();
@@ -48,7 +47,7 @@ public class FilenameValidator implements ConstraintValidator<ValidFilename, Str
             return false;
         }
         if (value.contains("..")) {
-          return false;
+            return false;
         }
 
         String upper = value.toUpperCase();

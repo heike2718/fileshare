@@ -61,11 +61,11 @@ public class UploadScannerDelegate {
         }
 
         if (responseDto.getThreadDetection() != null && responseDto.getThreadDetection().isSecurityThreadDetected()) {
-          return true;
+            return true;
         }
 
         if (responseDto.getVirusDetection() != null && responseDto.getVirusDetection().isVirusDetected()) {
-          return true;
+            return true;
         }
 
         return false;

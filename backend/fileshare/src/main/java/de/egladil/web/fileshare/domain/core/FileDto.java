@@ -5,7 +5,6 @@
 
 package de.egladil.web.fileshare.domain.core;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
