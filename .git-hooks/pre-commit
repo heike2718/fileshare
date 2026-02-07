@@ -1,4 +1,5 @@
-#!/usr/bin/env sh
+#!/bin/sh
+# purpose: running lint for clean diffs
 set -e
 
 FRONTEND_DIR="frontend/fileshare"

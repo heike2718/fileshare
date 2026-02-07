@@ -1,11 +1,12 @@
-#!/usr/bin/env sh
+#!/bin/sh
+# purpose: builds and tests
 set -e
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-FRONTEND_DIR="frontend/kaeuzchen-workspace"
-BACKEND_DIR="backend/kaeuzchenlager"
+FRONTEND_DIR="frontend/fileshare"
+BACKEND_DIR="backend/fileshare"
 
 echo "🚀 Running comprehensive pre-push checks..."
 
